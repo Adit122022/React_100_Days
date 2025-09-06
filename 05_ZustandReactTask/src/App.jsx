@@ -121,7 +121,7 @@ const App = () => {
 
 
       {/* Footer */}
-      <Footer totalTasks={tasks.length}/>
+      <Footer />
 
       {/* Task Form Modal */}
       <FormModal open={open} setOpen={setOpen} onSubmit={handleSubmit} />

@@ -25,6 +25,10 @@ export const usePlanner = create(
         set((state) => ({
           tasks: state.tasks.filter((task) => task._id !== id),
         })),
+      deleteAll: () =>
+        set(() => ({
+          tasks:[],
+        })),
     }),
     { name: "planner" }
   )

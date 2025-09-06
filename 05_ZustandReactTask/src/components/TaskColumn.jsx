@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Badge, Button, Card, Empty, Select, Tag, Tooltip, Modal } from "antd";
 import moment from "moment";
-import AddTaskButton from "./AddTaskButton";
+import AddTaskButton from "./Buttons/AddTaskButton";
 import { Calendar1, Clock } from "lucide-react";
 
 const gradientMap = {
