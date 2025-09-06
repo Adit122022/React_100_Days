@@ -35,13 +35,15 @@ setOpen(!open)
           label="Title"
           name="title"
           rules={[{ required: true, message: "Please enter a title" }]}
+        
         >
-          <Input placeholder="Enter title" />
+          <Input   maxLength={50}  placeholder="Enter title" />
         </Form.Item>
 
         {/* Description textarea */}
         <Form.Item label="Description" name="description">
           <Input.TextArea
+          maxLength={500}
             rows={4}
             rules={[{ required: true, message: "Please enter a title" }]}
             placeholder="Enter description"
