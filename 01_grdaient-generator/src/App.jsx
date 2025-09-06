@@ -24,23 +24,27 @@ const App = () => {
       const deg = Math.floor(Math.random() * 360);
 
       if (type === "linear") {
+        const css = `linear-gradient(${deg}deg,${color1},${color2})`;
         colors.push({
-          gradient: `linear-gradient(${deg}deg, ${color1}, ${color2})`,
-          css: `background: linear-gradient(${deg}deg, ${color1}, ${color2});`,
+          gradient: css,
+          css: `background: ${css};`,
+          tailwind: `bg-[${css}]`,
         });
       } else {
+        const css = `radial-gradient(circle, ${color1},${color2})`;
         colors.push({
-          gradient: `radial-gradient(circle, ${color1}, ${color2})`,
-          css: `background: radial-gradient(circle, ${color1}, ${color2});`,
+          gradient: css,
+          css: `background: ${css};`,
+          tailwind: `bg-[${css}]`,
         });
       }
     }
     setGradients(colors);
   };
 
-  const onCopy = (css) => {
-    navigator.clipboard.writeText(css);
-    toast.success("Gradient code copied!", { position: "top-center" });
+  const onCopy = (code, type = "CSS") => {
+    navigator.clipboard.writeText(code);
+    toast.success(`${type} code copied!`, { position: "top-center" });
   };
 
   useEffect(() => {
@@ -48,7 +52,7 @@ const App = () => {
   }, [num, type]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 py-10">
+    <div className="min-h-screen bg-[linear-gradient(58deg,#fcd3c8,#273f84)] py-10">
       <div className="max-w-6xl mx-auto px-4">
         {/* WhiteBoard at Top */}
         <WhiteBoard />
@@ -91,13 +95,21 @@ const App = () => {
               className="h-[200px] rounded-xl shadow-lg relative group overflow-hidden"
               style={{ background: item.gradient }}
             >
-              {/* Copy button */}
-              <button
-                onClick={() => onCopy(item.css)}
-                className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white px-3 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition"
-              >
-                Copy
-              </button>
+              {/* Copy Buttons */}
+              <div className="absolute bottom-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition">
+                <button
+                  onClick={() => onCopy(item.css, "CSS")}
+                  className="bg-black/60 backdrop-blur-md text-white px-3 py-1 rounded-lg text-sm hover:bg-black/80"
+                >
+                   Style
+                </button>
+                <button
+                  onClick={() => onCopy(item.tailwind, "Tailwind")}
+                  className="bg-blue-600/70 backdrop-blur-md text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-700"
+                >
+                  Tailwind
+                </button>
+              </div>
             </div>
           ))}
         </div>

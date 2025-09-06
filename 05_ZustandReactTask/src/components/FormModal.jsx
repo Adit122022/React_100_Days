@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Form, Input, Button } from "antd";
+import { Modal, Form, Input, Button, Select } from "antd";
 
 const FormModal = ({ open,setOpen ,onSubmit }) => {
   const [form] = Form.useForm();
@@ -22,7 +22,7 @@ setOpen(!open)
       open={open}
       onCancel={onClose}
       footer={null} // we’ll put the submit button inside the form
-      destroyOnClose
+      destroyOnHidden
     >
       <Form
         form={form}
@@ -46,6 +46,14 @@ setOpen(!open)
             rules={[{ required: true, message: "Please enter a title" }]}
             placeholder="Enter description"
           />
+        </Form.Item>
+        {/* Priority*/}
+        <Form.Item label="Priority" name="priority">
+         <Select placeholder="Choose Priority">
+          <Select.Option value="Highest">Highest</Select.Option>
+          <Select.Option value="Medium">Medium</Select.Option>
+          <Select.Option value="lowest">Lowest</Select.Option>
+         </Select>
         </Form.Item>
 
         {/* Submit button */}
