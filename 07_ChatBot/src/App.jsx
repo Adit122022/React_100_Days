@@ -1,14 +1,14 @@
 import { useState, useRef, useEffect } from "react";
-
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import { Send, User, Bot, Copy, RotateCcw } from "lucide-react";
+import { Send,  Bot,  RotateCcw, X, DockIcon } from "lucide-react";
 import GenAi from "./GenAi";
+import MessageBubble from "./MessageBubble";
 
 
 
 const App = () => {
   const [messages, setMessages] = useState([]);
+  const [Instruction ,SetSystemInstruction] =useState('')
+  const [showSystemSettings , setShowSystemSettings ] = useState(false)
   const [inputValue, setInputValue] = useState("");
   const [streamingReply, setStreamingReply] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -23,7 +23,8 @@ const App = () => {
         messages: [...messages, newMessage], 
         setMessages, 
         setStreamingReply, 
-        setIsLoading 
+        setIsLoading ,
+        Instruction
       });
       setInputValue("");
       if (textareaRef.current) {
@@ -47,13 +48,6 @@ const App = () => {
     textarea.style.height = Math.min(textarea.scrollHeight, 120) + "px";
   };
 
-  const copyToClipboard = async (text) => {
-    try {
-      await navigator.clipboard.writeText(text);
-    } catch (err) {
-      console.error("Failed to copy text: ", err);
-    }
-  };
 
   const clearChat = () => {
     setMessages([]);
@@ -66,109 +60,27 @@ const App = () => {
     }
   }, [messages, streamingReply]);
 
-  const MessageBubble = ({ message, isStreaming = false }) => {
-    const isBot = message.sender === "bot" || isStreaming;
-    
-    return (
-      <div className={`flex w-full ${isBot ? "justify-start" : "justify-end"} mb-6`}>
-        <div className={`flex max-w-[85%] ${isBot ? "flex-row" : "flex-row-reverse"} items-start gap-3`}>
-          {/* Avatar */}
-          <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
-            isBot ? "bg-orange-100 text-orange-600" : "bg-blue-100 text-blue-600"
-          }`}>
-            {isBot ? <Bot size={16} /> : <User size={16} />}
-          </div>
-          
-          {/* Message Content */}
-          <div className={`relative group ${
-            isBot ? "bg-white border border-gray-200" : "bg-gray-400 text-white"
-          } rounded-2xl px-4 py-3 shadow-sm`}>
-            {isBot ? (
-              <div className="prose prose-sm max-w-none">
-                <ReactMarkdown 
-                  remarkPlugins={[remarkGfm]}
-                  components={{
-                    // Custom styling for better readability
-                    p: ({children}) => <p className="mb-3 last:mb-0 leading-relaxed text-gray-800">{children}</p>,
-                    h1: ({children}) => <h1 className="text-xl font-semibold mb-3 text-gray-900 border-b pb-2">{children}</h1>,
-                    h2: ({children}) => <h2 className="text-lg font-semibold mb-3 text-gray-900">{children}</h2>,
-                    h3: ({children}) => <h3 className="text-base font-semibold mb-2 text-gray-900">{children}</h3>,
-                    ul: ({children}) => <ul className="mb-3 ml-4 space-y-1">{children}</ul>,
-                    ol: ({children}) => <ol className="mb-3 ml-4 space-y-1">{children}</ol>,
-                    li: ({children}) => <li className="text-gray-800 leading-relaxed">{children}</li>,
-                    code: ({children, className}) => {
-                      const isInline = !className;
-                      return isInline ? (
-                        <code className="bg-gray-100 text-gray-100 px-1.5 py-0.5 rounded text-sm font-mono">
-                          {children}
-                        </code>
-                      ) : (
-                        <code className={className}>{children}</code>
-                      );
-                    },
-                    pre: ({children}) => (
-                      <pre className="bg-gray-50 border rounded-lg p-3 text-slate-800 overflow-x-auto mb-3">
-                        {children}
-                      </pre>
-                    ),
-                    blockquote: ({children}) => (
-                      <blockquote className="border-l-4 border-gray-300 pl-4 italic text-gray-800 mb-3">
-                        {children}
-                      </blockquote>
-                    ),
-                    strong: ({children}) => <strong className="font-semibold text-gray-900">{children}</strong>,
-                  }}
-                >
-                  {message.text}
-                </ReactMarkdown>
-                
-                {/* Copy button for bot messages */}
-                {!isStreaming && (
-                  <button
-                    onClick={() => copyToClipboard(message.text)}
-                    className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity p-1.5 rounded-md hover:bg-gray-100"
-                    title="Copy message"
-                  >
-                    <Copy size={14} className="text-gray-500" />
-                  </button>
-                )}
-              </div>
-            ) : (
-              <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.text}</p>
-            )}
-            
-            {/* Streaming indicator */}
-            {isStreaming && (
-              <div className="flex items-center gap-1 mt-2">
-                <div className="flex space-x-1">
-                  <div className="w-1.5 h-1.5 bg-orange-500 rounded-full animate-pulse"></div>
-                  <div className="w-1.5 h-1.5 bg-orange-500 rounded-full animate-pulse" style={{animationDelay: "0.2s"}}></div>
-                  <div className="w-1.5 h-1.5 bg-orange-500 rounded-full animate-pulse" style={{animationDelay: "0.4s"}}></div>
-                </div>
-                <span className="text-xs text-gray-500 ml-1">Orion is thinking...</span>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  };
+ 
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50">
+    <div className="flex flex-col text-gray-500 h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center">
+          <div className="flex items-center w-full space-x-3">
+           <div className="">
+             <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center">
               <span className="text-white font-bold text-sm">O</span>
             </div>
             <div>
               <h1 className="text-lg font-semibold text-gray-900">Orion AI</h1>
               <p className="text-xs text-gray-500">Powered by Gemini 2.0 Flash</p>
             </div>
+           </div>
+            
           </div>
           
+          <DockIcon onClick={()=>setShowSystemSettings(!showSystemSettings)} className="text-black mr-4"/>
           {messages.length > 0 && (
             <button
               onClick={clearChat}
@@ -179,6 +91,30 @@ const App = () => {
             </button>
           )}
         </div>
+          {/* System Instruction Panel */}
+        {showSystemSettings && (
+          <div className="mt-4 p-4 bg-gray-50 rounded-lg border">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-medium text-gray-900">System Instructions</h3>
+              <button
+                onClick={() => setShowSystemSettings(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X size={16} />
+              </button>
+            </div>
+            <textarea
+              className="w-full resize-none border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              placeholder="Enter custom instructions for the AI (e.g., 'You are a helpful coding assistant', 'Always respond in bullet points', etc.)"
+              value={Instruction}
+              onChange={(e) => SetSystemInstruction(e.target.value)}
+              rows={3}
+            />
+            <p className="text-xs text-gray-500 mt-2">
+              System instructions help customize the AI's behavior and response style.
+            </p>
+          </div>
+        )}
       </header>
 
       {/* Chat Container */}
@@ -264,3 +200,22 @@ const App = () => {
 };
 
 export default App;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
