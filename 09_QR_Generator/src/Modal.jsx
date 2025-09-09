@@ -1,22 +1,26 @@
 import { Button, Form, Input, Modal, Upload } from "antd"
 import { UploadOutlined } from "@ant-design/icons"
 
+const getBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = (error) => reject(error)
+  })
+}
+
+
 const ModalForm = ({ showModal, setShowModal, setQrCode }) => {
   const [form] = Form.useForm()
 
-  const getFormData = (values) => {
-     console.log(values)
+const getFormData = async (values) => {
   let iconUrl = null;
+  console.log(values)
 
-  if (values.icon && values.icon.file) {
-    // Case: uploaded file
-    iconUrl = values.icon.file.thumbUrl; 
-  } else if (values.icon && values.icon.fileList) {
-    // Case: fileList array
-    iconUrl = values.icon.fileList[0].thumbUrl;
-  } else {
-    // Case: maybe user enters direct URL (if you add that option later)
-    iconUrl = values.icon;
+  if (values.icon && values.icon.length > 0 && values.icon[0].originFileObj) {
+    // Convert uploaded file (Blob) to Base64
+    iconUrl = await getBase64(values.icon[0].originFileObj);
   }
 
   setQrCode({
@@ -29,6 +33,8 @@ const ModalForm = ({ showModal, setShowModal, setQrCode }) => {
   form.resetFields();
   setShowModal(false);
 };
+
+
 
 
   return (
@@ -70,6 +76,7 @@ const ModalForm = ({ showModal, setShowModal, setQrCode }) => {
           <Form.Item
             label={<span className="font-medium">🎨 QR Code Color</span>}
             name="color"
+            initialValue="#000"
           >
             <Input type="color" size="large" className="rounded-lg cursor-pointer h-12" />
           </Form.Item>
@@ -78,28 +85,32 @@ const ModalForm = ({ showModal, setShowModal, setQrCode }) => {
           <Form.Item
             label={<span className="font-medium">🌈 Background Color</span>}
             name="bgColor"
+            initialValue="#fffff"
           >
             <Input type="color" size="large" className="rounded-lg cursor-pointer h-12" />
           </Form.Item>
 
           {/* Logo Upload */}
-          <Form.Item
-            label={<span className="font-medium">🖼️ Logo (optional)</span>}
-            name="icon"
-            className="col-span-2"
-          >
-            <Upload
-              maxCount={1}
-              listType="picture-card"
-              accept="image/*"
-              beforeUpload={() => false}
-              className="w-full"
-            >
-              <div className="text-sm text-gray-600">
-                <UploadOutlined /> Upload Logo
-              </div>
-            </Upload>
-          </Form.Item>
+       <Form.Item
+  label={<span className="font-medium">🖼️ Logo (optional)</span>}
+  name="icon"
+  valuePropName="fileList"
+  getValueFromEvent={(e) => Array.isArray(e) ? e : e?.fileList}
+  className="col-span-2"
+>
+  <Upload
+    maxCount={1}
+    listType="picture-card"
+    accept="image/*"
+    beforeUpload={() => false}
+    className="w-full"
+  >
+    <div className="text-sm text-gray-600">
+      <UploadOutlined /> Upload Logo
+    </div>
+  </Upload>
+</Form.Item>
+
 
           {/* Submit Button */}
           <Form.Item className="col-span-2">
