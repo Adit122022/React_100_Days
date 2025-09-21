@@ -1,8 +1,8 @@
 
 
-import React, { Suspense, lazy, useState, useEffect } from "react";
+import  { Suspense, lazy, useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
-import SideBar from "./components/templates/SideBar";
+
 
 // Enhanced Splash Screen with Cinematic Animation
 const ElegantGlowLoader = () => (
@@ -37,6 +37,7 @@ const RouteTransitionLoader = () => (
 );
 
 // Lazy load route components
+const SideBar = lazy(() => import("./components/templates/SideBar"));
 const Home = lazy(() => import("./components/Home"));
 const Trending = lazy(() => import("./components/Trending"));
 const Popular = lazy(() => import("./components/Popular"));
@@ -66,7 +67,7 @@ const App = () => {
   }
 
   return (
-    <div className="w-full h-screen bg-[#1F1E24] flex">
+    <div className="w-screen h-screen bg-[#1F1E24] md:flex">
       <SideBar />
       <Suspense fallback={<RouteTransitionLoader />}>
         <Routes>

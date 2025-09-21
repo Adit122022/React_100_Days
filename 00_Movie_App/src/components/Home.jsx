@@ -9,16 +9,15 @@ import instance from "../../src/utils/Axios";
 
 const Home = () => {
   document.title = "StarStream | Home";
+
   const [wallpaper, setWallpaper] = useState(null);
-  const [Trending, setTrending] = useState([]);
-  const [caterogy, setCaterogy] = useState("all");
+  const [trending, setTrending] = useState([]);
+  const [category, setCategory] = useState("all");
 
   const GetHeaderWallpaper = async () => {
     try {
       const { data } = await instance.get(`/trending/all/day`);
-      setWallpaper(
-        data.results[Math.floor(Math.random() * data.results.length)]
-      );
+      setWallpaper(data.results[Math.floor(Math.random() * data.results.length)]);
     } catch (error) {
       console.log("ERROR:", error);
     }
@@ -26,9 +25,8 @@ const Home = () => {
 
   const GetTrending = async () => {
     try {
-      const { data } = await instance.get(`/trending/${caterogy}/day`);
+      const { data } = await instance.get(`/trending/${category}/day`);
       setTrending(data.results);
-      //   console.log(data.results);
     } catch (error) {
       console.log("ERROR:", error);
     }
@@ -36,27 +34,52 @@ const Home = () => {
 
   useEffect(() => {
     GetTrending();
-    !wallpaper && GetHeaderWallpaper(setWallpaper);
-  }, [caterogy]);
-  // console.log(Trending)
+    if (!wallpaper) GetHeaderWallpaper();
+  }, [category]);
 
-  return wallpaper && Trending ? (
-    <>
-      <SideBar data={wallpaper} />
-      <div className="w-[80%] h-full overflow-auto">
-        <TopNav />
-        <Header data={wallpaper} />
-        <div className="w-full  p-5">
-          <div className="mb-5 flex justify-between">
-            <h1 className="text-3xl font-semibold text-zinc-400">Trending</h1>
-            <Dropdown title="Filter" options={["tv", "movie", "all"]} func={setCaterogy} />
+  if (!wallpaper || !trending) return <Loader />;
+
+  return (
+    <div className="flex w-screen h-screen bg-zinc-950 text-white overflow-hidden">
+      {/* Sidebar (collapsible on mobile handled inside component) */}
+      {/* <SideBar /> */}
+
+      {/* Main Content */}
+      <main className="flex-1 h-full w-screen overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-zinc-900">
+        <div className="  mx-auto w-screen px-4 sm:px-6 lg:px-8">
+          {/* Top Search Navigation */}
+          <div className="sticky top-0 bg-zinc-950/80 backdrop-blur-md z-30 py-4">
+            <TopNav />
           </div>
+
+          {/* Hero Header Banner */}
+          <section className="mt-4">
+            <Header data={wallpaper} />
+          </section>
+
+          {/* Trending Section */}
+          <section className="mt-10">
+            <div className="flex items-center justify-between mb-6">
+              <h1 className="text-2xl sm:text-3xl font-semibold text-zinc-300 tracking-wide">
+                🔥 Trending
+              </h1>
+              <Dropdown
+                title="Filter"
+                options={["tv", "movie", "all"]}
+                func={setCategory}
+              />
+            </div>
+
+            <HorizontalCards data={trending} />
+          </section>
+
+          {/* Optional Footer */}
+          <footer className="text-center text-zinc-600 text-sm py-10">
+            © {new Date().getFullYear()} StarStream. All rights reserved.
+          </footer>
         </div>
-        <HorizontalCards data={Trending} setCaterogy={setCaterogy} />
-      </div>
-    </>
-  ) : (
-    <Loader/>
+      </main>
+    </div>
   );
 };
 
