@@ -7,16 +7,36 @@ import { nanoid } from 'nanoid'
 
 const App = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editId, setEditId] = useState(null);
   const [form] = Form.useForm()
-  const { expenses, setExpenses, deleteExpenses } = useExpense();
+  const { expenses, setExpenses, deleteExpenses, editExpense } = useExpense();
 
-  const createExpenses = (value) => {
-    value.id = nanoid()
-    value.date = moment(value.date).format("DD-MM-YY, hh:mm A");
-    setExpenses(value)
+  const createExpenses = (values) => {
+    const formattedDate = moment(values.date).format("DD-MM-YY, hh:mm A");
+
+    if (editId) {
+      // 🔹 Update existing expense
+      const updatedExpense = { ...values, date: formattedDate };
+      editExpense(editId, updatedExpense);
+      console.log("Expense Updated:", updatedExpense);
+    } else {
+      // 🔹 Create new expense
+      const newExpense = { ...values, id: nanoid(), date: formattedDate };
+      setExpenses(newExpense);
+      console.log("Expense Created:", newExpense);
+    }
+
     setIsModalOpen(false);
     form.resetFields();
-    console.log("Expense Created:", value);
+    setEditId(null);
+  }
+  const EditFunc = (item) => {
+    setEditId(item.id);
+    setIsModalOpen(true);
+    form.setFieldsValue({
+    ...item,
+    date: moment(item.date, "DD-MM-YY, hh:mm A"), 
+    });
   }
   const openModal = () => {
     setIsModalOpen(true);
@@ -26,6 +46,7 @@ const App = () => {
     setIsModalOpen(false);
     form.resetFields();
   };
+
 
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 py-12 px-4">
@@ -84,10 +105,10 @@ const App = () => {
                       <td className="py-3 px-4 font-semibold text-green-400">₹{item.amount}</td>
                       <td className="py-3 px-4 text-white/70">{item.date}</td>
                       <td className="py-3 px-4 flex justify-center gap-2">
-                        <button onClick={() => { deleteExpenses(id) }} className="bg-red-500 cursor-pointer active:scale-95 hover:bg-red-600 p-2 rounded-lg transition-all">
+                        <button onClick={() => { deleteExpenses(item.id) }} className="bg-red-500 cursor-pointer active:scale-95 hover:bg-red-600 p-2 rounded-lg transition-all">
                           <Delete className="w-4 h-4" />
                         </button>
-                        <button className="bg-emerald-500 hover:bg-emerald-600 p-2 rounded-lg transition-all">
+                        <button onClick={() => { EditFunc(item) }} className="bg-emerald-500 hover:bg-emerald-600 p-2 rounded-lg transition-all">
                           <Edit className="w-4 h-4" />
                         </button>
                       </td>
@@ -102,7 +123,7 @@ const App = () => {
           }
         </div>
       </div>
-      <Modal className="custom-modal" open={isModalOpen} onCancel={closeModal} title="Add Expense" footer={null}>
+      <Modal className="custom-modal" open={isModalOpen} onCancel={closeModal} title={editId ? "Edit Expense" : "Add Expense"} footer={null}>
         <Form form={form} layout='vertical' className='bg-transparent' onFinish={createExpenses}>
           <Form.Item label="Expense Title" name="title" rules={[{ required: true, message: 'Please enter expense title' }]}>
             <Input size='large' placeholder='Expense Name Here' />
@@ -120,7 +141,7 @@ const App = () => {
           </div>
           <Form.Item>
             <button type='submit' className='w-full cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl transition-all  font-semibold'>
-              Add Expense
+              {editId ? "Update Expense" : "Add Expense"}
             </button>
           </Form.Item>
         </Form>
