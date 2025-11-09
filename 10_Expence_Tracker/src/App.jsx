@@ -3,6 +3,7 @@ import { Delete, Edit, Plus, Search } from 'lucide-react';
 import { DatePicker, Empty, Form, Input, InputNumber, Modal } from 'antd';
 import moment from 'moment';
 import { useExpense } from './zustand/useExpense';
+import { nanoid } from 'nanoid'
 
 const App = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -10,6 +11,7 @@ const App = () => {
   const { expenses, setExpenses, deleteExpenses } = useExpense();
 
   const createExpenses = (value) => {
+    value.id = nanoid()
     value.date = moment(value.date).format("DD-MM-YY, hh:mm A");
     setExpenses(value)
     setIsModalOpen(false);
