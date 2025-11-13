@@ -1,4 +1,3 @@
-import React from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import {
     FormControl,
@@ -9,27 +8,43 @@ import {
     FormMessage,
 } from '../ui/form'
 import { Input } from '../ui/input'
+import { z } from "zod"
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '../ui/button'
-import { ModeToggle } from '../ui/mode-toggle'
+
+
+
+const formSchema = z.object({
+    username: z.string()
+        .min(3, 'Username must be at least 3 characters')
+        .max(20, 'Username cannot exceed 20 characters'),
+    email: z.string().email('Please enter a valid email'),
+    password: z.string()
+        .min(6, 'Password must be at least 6 characters')
+        .max(8, 'Password too long'),
+})
 
 const Admin = () => {
-    const form = useForm({
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
         defaultValues: {
-            username: '',
-            email: '',
-            password: '',
+            username: "",
+            email: "",
+            password: "",
         },
     })
 
-    const onSubmit = (data) => {
+
+    const onSubmit = (data: z.infer<typeof formSchema>) => {
         console.log('Admin Login Data:', data)
         // yahan tum API call kar sakte ho login ke liye
     }
 
     return (
-        <div className=' h-screen flex items-center justify-center'>
+        <div className='h-screen flex items-center justify-center'>
 
-            <div className="border-white border-2 w-8/12 shadow-lg rounded-lg  overflow-hidden">
+            <div className="bg-muted/80  border-sidebar-ring border-2 w-1/2 shadow-lg rounded-lg  py-5   overflow-hidden">
+                {/* <div className="bg-muted  border-sidebar-ring border-2 w-8/12 shadow-lg rounded-lg grid grid-cols-2  overflow-hidden"> */}
                 {/* Left Side Image */}
                 {/* <img
                     src="/images/admin-login.jpeg"
@@ -38,8 +53,8 @@ const Admin = () => {
                 /> */}
 
                 {/* Right Side Form */}
-                <div className="flex flex-col justify-center px-10 py-8">
-                    <h2 className="text-2xl font-semibold mb-6 text-center">Admin Login</h2>
+                <div className="flex flex-col justify-center  px-10 ">
+                    <h2 className="text-3xl font-semibold mb-10 text-muted-foreground text-center">Admin Login</h2>
 
                     <FormProvider {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
@@ -50,7 +65,7 @@ const Admin = () => {
                                 name="username"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Username</FormLabel>
+                                        <FormLabel className='text-muted-foreground'>Username</FormLabel>
                                         <FormControl>
                                             <Input placeholder="Enter username" {...field} />
                                         </FormControl>
@@ -66,7 +81,7 @@ const Admin = () => {
                                 name="email"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Email</FormLabel>
+                                        <FormLabel className='text-muted-foreground'>Email</FormLabel>
                                         <FormControl>
                                             <Input placeholder="admin@example.com" type="email" {...field} />
                                         </FormControl>
@@ -82,7 +97,7 @@ const Admin = () => {
                                 name="password"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Password</FormLabel>
+                                        <FormLabel className='text-muted-foreground'>Password</FormLabel>
                                         <FormControl>
                                             <Input placeholder="••••••••" type="password" {...field} />
                                         </FormControl>
@@ -93,7 +108,7 @@ const Admin = () => {
                             />
 
                             {/* Submit Button */}
-                            <Button type="submit" className="w-full mt-4">Login</Button>
+                            <Button type="submit" className="w-full mt-4 ">Login</Button>
 
                         </form>
                     </FormProvider>
