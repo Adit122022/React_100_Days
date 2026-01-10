@@ -29,7 +29,7 @@ const formSchema = z.object({
 })
 type FormValues = z.infer<typeof formSchema>
 
-const Admin = () => {
+const FormDesign = () => {
     const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -59,7 +59,7 @@ const Admin = () => {
 
                 {/* Right Side Form */}
                 <div className="flex flex-col justify-center  px-10 ">
-                    <h2 className="text-3xl font-semibold mb-10 text-muted-foreground text-center">Admin Login</h2>
+                    <h2 className="text-3xl  mb-10 text-primary font-bold text-center">Admin Login</h2>
 
                     <FormProvider {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
@@ -123,4 +123,4 @@ const Admin = () => {
     )
 }
 
-export default Admin
+export default FormDesign;

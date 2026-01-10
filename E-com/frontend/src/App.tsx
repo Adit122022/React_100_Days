@@ -1,4 +1,5 @@
-import Admin from "./components/Admin/Admin"
+import Admin from "./components/Admin/AdminLogin"
+import Login from "./components/auth/Login";
 import Squares from './components/ui/Squares';
 
 const App = () => {
@@ -15,7 +16,8 @@ const App = () => {
       </div>
       <div className="absolute top-0  w-screen h-screen">
 
-        <Admin />
+        {/* <Admin /> */}
+        <Login />
       </div>
     </div>
   )
