@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+/* Add this CSS in your index.css or App.css */
+.custom-modal .ant-modal-content {
+  background: linear-gradient(to bottom right, #0f172a, #1e293b, #0f172a) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  border-radius: 1rem !important;
+  box-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
+}
+
+.custom-modal .ant-modal-header {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: white !important;
+}
+
+.custom-modal .ant-modal-title {
+  color: white !important;
+}
+
+.custom-modal .ant-modal-close-x {
+  color: white !important;
+}
+
+.custom-modal .ant-input,
+.custom-modal .ant-input-number,
+.custom-modal .ant-picker {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: white !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.custom-modal .ant-input::placeholder,
+.custom-modal .ant-input-number-input::placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.custom-modal .ant-form-item .ant-form-item-label >label {
+  color: white !important;
+}
