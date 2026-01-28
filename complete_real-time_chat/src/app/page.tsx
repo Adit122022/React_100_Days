@@ -1,4 +1,5 @@
 "use client"
+import { client } from "@/lib/client"
 import { nanoid } from "nanoid"
 import { useEffect, useState } from "react"
 
@@ -13,10 +14,13 @@ const generatedUsername = () => {
 
 export default function Home() {
 
+
   const [username, setUsername] = useState("")
 
   useEffect(() => {
-    const main = () => {
+    const main = async () => {
+      const message = await client.user.get()
+      console.log(message)
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
         setUsername(stored);

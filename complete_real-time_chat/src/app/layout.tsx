@@ -21,7 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${jetbrainsMono.variable} antialiased`}
-      >
+        cz-shortcut-listen="true">
         {children}
       </body>
     </html>
