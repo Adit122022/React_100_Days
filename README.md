@@ -29,7 +29,7 @@ _Advanced System Design & End-to-End Logic_
 
 Before diving into the logic drills, these two projects represent the culmination of many smaller lessons—fully functional, full-stack applications built with **Next.js**.
 
-### 1. **[Setsuna (刹那)](./complete_real-time_chat)**
+### 1. **[Setsuna (刹那)](./Setsuna(刹那))**
 
 > **Concept**: _Ephemeral Data Architecture & Real-Time WebSockets_
 >
