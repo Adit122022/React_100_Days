@@ -1,9 +1,11 @@
 "use client"
 import { useParams } from 'next/navigation'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 
 const Page = () => {
     const [copyStatus, setCopyStatus] = useState("COPY")
+    const [input, setInput] = useState("")
+    const inputRef = useRef<HTMLInputElement>(null);
     const [timeRemaining, setTimeRemainimg] = useState<number | null>(null)
     const params = useParams()
     const roomId = params.roomId as string;
@@ -62,10 +64,17 @@ const Page = () => {
                         <span className='absolute left-4 top-1/2 -translate-y-1/2 text-green-500 animate-pulse-'>
                             {">"}
                         </span>
-                        <input autoFocus className='w-full bg-black border border-zinc-800 focus:border-zinc-700 focus:outline-none transition-colors text-zinc-100 placeholder:text-zinc-700 py-3 pl-8 pr-4 text-sm' type="text" name="" id="" />
+                        <input ref={inputRef} onChange={(e) => setInput(e.target.value)} value={input} onKeyDown={(e) => {
+                            if (e.key === "Enter" && input.trim()) {
+                                // TODO :SEND MESSAGE 
+                                inputRef.current?.focus()
+                            }
+                        }}
+                            placeholder='Type Message ...'
+                            autoFocus className='w-full bg-black border border-zinc-800 focus:border-zinc-700 focus:outline-none transition-colors text-zinc-100 placeholder:text-zinc-700 py-3 pl-8 pr-4 text-sm' type="text" name="" id="" />
                     </div>
 
-                    <button className='bg-zinc-800 text-zinc-400 px-6 text-sm font-bold hover:text-zinc-200 transition-all disabled:opacity-50'>SEND</button>
+                    <button className='bg-zinc-800 text-zinc-400 px-6 text-sm font-bold hover:text-zinc-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer'>SEND</button>
                 </div>
             </div>
         </main>
