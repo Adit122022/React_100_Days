@@ -1,4 +1,7 @@
 "use client"
+import { useUsername } from '@/hooks/use-username'
+import { client } from '@/lib/client'
+import { useMutation } from '@tanstack/react-query'
 import { useParams } from 'next/navigation'
 import React, { useRef, useState } from 'react'
 
@@ -9,6 +12,13 @@ const Page = () => {
     const [timeRemaining, setTimeRemainimg] = useState<number | null>(null)
     const params = useParams()
     const roomId = params.roomId as string;
+
+    const { username } = useUsername()
+    const { mutate: sendMessage } = useMutation({
+        mutationFn: async ({ text }: { text: string }) => {
+            await client.messages.post({ sender: username, text }, { query: roomId })
+        }
+    })
 
     const copyLink = () => {
         const url = window.location.href
@@ -66,7 +76,7 @@ const Page = () => {
                         </span>
                         <input ref={inputRef} onChange={(e) => setInput(e.target.value)} value={input} onKeyDown={(e) => {
                             if (e.key === "Enter" && input.trim()) {
-                                // TODO :SEND MESSAGE 
+                                sendMessage(input)
                                 inputRef.current?.focus()
                             }
                         }}
