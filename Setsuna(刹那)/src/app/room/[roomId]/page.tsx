@@ -14,9 +14,9 @@ const Page = () => {
     const roomId = params.roomId as string;
 
     const { username } = useUsername()
-    const { mutate: sendMessage } = useMutation({
+    const { mutate: sendMessage, isPending } = useMutation({
         mutationFn: async ({ text }: { text: string }) => {
-            await client.messages.post({ sender: username, text }, { query: roomId })
+            await client.messages.post({ sender: username, text }, { query: { roomId } })
         }
     })
 
@@ -76,7 +76,7 @@ const Page = () => {
                         </span>
                         <input ref={inputRef} onChange={(e) => setInput(e.target.value)} value={input} onKeyDown={(e) => {
                             if (e.key === "Enter" && input.trim()) {
-                                sendMessage(input)
+                                sendMessage({ text: input })
                                 inputRef.current?.focus()
                             }
                         }}
@@ -84,7 +84,12 @@ const Page = () => {
                             autoFocus className='w-full bg-black border border-zinc-800 focus:border-zinc-700 focus:outline-none transition-colors text-zinc-100 placeholder:text-zinc-700 py-3 pl-8 pr-4 text-sm' type="text" name="" id="" />
                     </div>
 
-                    <button className='bg-zinc-800 text-zinc-400 px-6 text-sm font-bold hover:text-zinc-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer'>SEND</button>
+                    <button onClick={() => {
+                        if (input.trim()) {
+                            sendMessage({ text: input })
+                            inputRef.current?.focus()
+                        }
+                    }} disabled={!input.trim() || isPending} className='bg-zinc-800 text-zinc-400 px-6 text-sm font-bold hover:text-zinc-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer'>SEND</button>
                 </div>
             </div>
         </main>

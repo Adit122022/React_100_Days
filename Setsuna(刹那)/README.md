@@ -132,3 +132,46 @@ UPSTASH_REDIS_REST_TOKEN=your_token_here
 - **Ephemeral Rooms**: Every room and its data is hard-deleted after **10 minutes**.
 - **End-to-End Type Safety**: Changes in the backend API are immediately reflected in the frontend client, preventing runtime errors.
 - **Real-Time Updates**: Fast message delivery and state synchronization.
+
+---
+
+## ⚡ Real-Time Architecture
+
+Setsuna uses **[@upstash/realtime](https://upstash.com/docs/realtime)** for strictly typed, serverless WebSocket communication.
+
+### Events
+
+The application defines a strict Zod schema for real-time events, ensuring type safety between the backend and frontend.
+
+- **`chat.message`**:
+  - Payload: `{ id, text, roomId, sender, timestamp }`
+  - Triggered when a user sends a message.
+- **`chat.destroy`**:
+  - Payload: `{ isDestroyed: true }`
+  - Triggered when the room's TTL expires.
+
+---
+
+## 💾 Redis Data Schema
+
+We use a simple but effective Redis schema to manage ephemeral state.
+
+| Key Structure      | Type | Description                                                                        |
+| :----------------- | :--- | :--------------------------------------------------------------------------------- |
+| `meta:{roomId}`    | Hash | Stores room metadata (creation time, connection status). TTL is set to 10 minutes. |
+| `message:{roomId}` | List | Stores the ordered history of chat messages for the room.                          |
+| `history:{roomId}` | Key  | Used to track expiration synchronization across keys.                              |
+
+---
+
+## 🧩 Key Utilities
+
+### `src/hooks/use-username.ts`
+
+- **Anonymous Identity**: Generates a random username (e.g., `anonymous-Panda-x9Yz2`) on the client side.
+- **Persistence**: Persists the username in `localStorage` under `cat_username` so users maintain their identity across reloads.
+
+### `src/lib/realtime.ts`
+
+- **Typed Client**: Exports a pre-configured `Realtime` instance with the Zod schema applied.
+- **Type Inference**: Exports `RealtimeEvents` and `Message` types for use throughout the application.
