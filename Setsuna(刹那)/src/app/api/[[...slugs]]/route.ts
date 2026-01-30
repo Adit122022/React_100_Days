@@ -1,6 +1,7 @@
 import { redis } from '@/lib/redis';
 import { Elysia } from 'elysia'
 import { nanoid } from 'nanoid'
+import { authMiddleare } from './auth';
 
 const  ROOM_TTL_SECONDS = 60 * 10
 
@@ -19,6 +20,13 @@ export const rooms =new Elysia({prefix:"/room"})
  await redis.expire(`meta:${roomId}`,ROOM_TTL_SECONDS)
 
  return {roomId}
+})
+
+
+const messages = new Elysia({prefix:"/message"}).use(authMiddleare)
+.post("/",({body,auth})=>{
+ const { sender , text } = body
+ 
 })
 
 export const app = new Elysia({ prefix: '/api'})

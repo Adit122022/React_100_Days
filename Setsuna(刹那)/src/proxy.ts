@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { redis } from "./lib/redis";
+import { nanoid } from "nanoid";
+import { connect } from "http2";
 
 export const proxy = async (req:NextRequest )=>{
 const pathname = req.nextUrl.pathname;
@@ -12,11 +14,27 @@ const meta = await redis.hgetall<{connected:string[], createdAt :number}>(`meta:
 
  if(!meta) return  NextResponse.redirect(new URL("/?error=room-not-found", req.url))
 
-    // TODO : TOKEN arbatery tokens from REDIS DATABASES 
+const exisitingToken = req.cookies.get("x-auth-token")?.value
+if(exisitingToken && meta.connected.includes(exisitingToken)){
+    return NextResponse.next()
+}
+//  not allow more than 2 users in a room
+ if(meta.connected.length >= 2){
+    return NextResponse.redirect(new URL("/?error=room-full", req.url))
+ }
+const response = NextResponse.next()
 
-//  OVERVIEW : CHECK IF USER IS ALLOWED TO JOIN ROOM
-//  IF THEY ARE : LET THEM PASS
-//  IF THEY ARE NOT : SEND THEM TO LOBBY
+//  token for the user
+const token = nanoid(); 
+ response.cookies.set("x-auth-token", token,{
+    path:"/",
+    httpOnly:true,
+    secure:process.env.NODE_ENV==="production",
+    sameSite:"strict"
+ })
+
+ await redis.hset(`meta:${roomId}`,{connected:[...meta.connected , token]})
+ return response;
 }
 
 
