@@ -4,9 +4,10 @@
 
 **Setsuna** is a modern, high-performance, real-time chat application designed for true anonymity. Like the "moment" its name implies, every conversation is ephemeral.
 
-### 🔒 10-Minute Lifespan
+### 🔒 10-Minute Lifespan & Self-Destruct
 
-**Your privacy is our priority.** Every chat room has a strict **10-minute lifespan**. Once the time is up, the room creates a self-destruct sequence, and all messages are permanently erased. Your one-to-one chats are always safe because they simply cease to exist.
+**Your privacy is our priority.** Every chat room has a strict **10-minute lifespan**. Once the time is up, the room creates a self-destruct sequence, and all messages are permanently erased.
+Additionally, users can manually trigger a **"Destroy Now"** sequence if they wish to end the conversation immediately. Your chats are always safe because they simply cease to exist.
 
 ---
 
@@ -21,6 +22,17 @@ This project leverages a cutting-edge stack to ensure a seamless developer and u
 - **[TanStack Query](https://tanstack.com/query/latest)**: Manages asynchronous state, caching, and data fetching on the client side.
 - **[Upstash Redis](https://upstash.com/)**: Serverless Redis database used for real-time data persistence and state management.
 - **[Tailwind CSS](https://tailwindcss.com/)**: Utility-first CSS framework for styling.
+
+---
+
+## ✨ Features
+
+- **Anonymous Identity**: Users are automatically assigned a unique, anonymous identity (e.g., `anonymous-Panda-x9Yz2`) upon visiting.
+- **Join Existing Rooms**: Users can join any active room by getting the Room ID from a friend. The app verifies the room's existence before joining.
+- **Ephemeral Rooms**: Every room and its data is hard-deleted after **10 minutes**.
+- **Manual Destruction**: Users can instantly destroy the room and all its contents with a single click.
+- **End-to-End Type Safety**: Changes in the backend API are immediately reflected in the frontend client, preventing runtime errors.
+- **Real-Time Updates**: Fast message delivery and state synchronization.
 
 ---
 
@@ -40,14 +52,16 @@ The core application routing and logic (App Router).
   - Contains the logic for individual chat rooms.
   - Uses the **Eden client** to send and receive messages in real-time.
   - Fetches initial messages using **TanStack Query**.
+  - Handles the "Destroy Now" and "Copy Room ID" features.
 
 - **`layout.tsx`**:
   - The root layout file that wraps the application.
-  - It wraps the children in the `Providers` component (imported from `src/components/provider.tsx`) to ensure **TanStack Query** context is available globally.
+  - It wraps the children in the `Providers` component to ensure **TanStack Query** context is available globally.
 
 - **`page.tsx`**:
   - The entry point (landing page).
-  - Handles the creation of new rooms and redirects users to unique room URLs.
+  - Handles the creation of new rooms.
+  - **New Feature**: "Join Room" input allows users to paste a Room ID and join existing sessions.
 
 ### `src/lib`
 
@@ -124,14 +138,15 @@ UPSTASH_REDIS_REST_URL=your_url_here
 UPSTASH_REDIS_REST_TOKEN=your_token_here
 ```
 
----
+### 4. Running the App
 
-## ✨ Features
+To start the development server:
 
-- **Anonymous Identity**: Users are automatically assigned a unique, anonymous identity (e.g., `anonymous-Panda-x9Yz2`) upon visiting.
-- **Ephemeral Rooms**: Every room and its data is hard-deleted after **10 minutes**.
-- **End-to-End Type Safety**: Changes in the backend API are immediately reflected in the frontend client, preventing runtime errors.
-- **Real-Time Updates**: Fast message delivery and state synchronization.
+```bash
+bun run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ---
 
@@ -148,7 +163,7 @@ The application defines a strict Zod schema for real-time events, ensuring type 
   - Triggered when a user sends a message.
 - **`chat.destroy`**:
   - Payload: `{ isDestroyed: true }`
-  - Triggered when the room's TTL expires.
+  - Triggered when the room's TTL expires or is manually destroyed.
 
 ---
 
