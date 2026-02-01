@@ -35,12 +35,14 @@ const Navigation = () => {
         </div>
         <div className="flex items-center text-[13px] font-semibold tracking-wide">
           <p className="nav-item font-bold px-3">Finder</p>
-          <p className="nav-item px-3">File</p>
-          <p className="nav-item px-3">Edit</p>
-          <p className="nav-item px-3">View</p>
-          <p className="nav-item px-3">Go</p>
-          <p className="nav-item px-3">Window</p>
-          <p className="nav-item px-3">Help</p>
+          <div className="hidden md:flex">
+            <p className="nav-item px-3">File</p>
+            <p className="nav-item px-3">Edit</p>
+            <p className="nav-item px-3">View</p>
+            <p className="nav-item px-3">Go</p>
+            <p className="nav-item px-3">Window</p>
+            <p className="nav-item px-3">Help</p>
+          </div>
         </div>
       </div>
 

@@ -24,3 +24,15 @@ export const wallpapersList = [
     thumbnail: "./monterey.jpg",
   },
 ];
+
+export const dots = [
+  { icon: "bg-red-500", fn: () => console.log("red") },
+  { icon: "bg-yellow-500", fn: () => console.log("yellow") },
+  { icon: "bg-green-500", fn: () => console.log("green") },
+];
+
+export const userDetails = {
+    name:"aditya",
+    age:20,
+    gender:"male"
+}

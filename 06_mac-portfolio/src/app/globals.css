@@ -7,15 +7,17 @@
 /* Dock.tsx */
 .dock-container {
   /* Using @apply for the glass-morphism look */
-  @apply fixed bottom-4 left-1/2 -translate-x-1/2 w-1/3;
-  @apply flex items-center gap-4 px-4 py-3;
+  @apply fixed bottom-4 left-1/2 -translate-x-1/2;
+  @apply w-[90%] md:w-auto max-w-[95vw]; /* Responsive width */
+  @apply flex items-center justify-center gap-2 md:gap-4 px-3 md:px-4 py-3;
   @apply rounded-2xl border border-white/20;
   @apply bg-white/10 backdrop-blur-lg shadow-2xl;
+  @apply overflow-x-auto md:overflow-visible; /* Allow scroll on very small screens if needed, otherwise fit */
 }
 
 .dock-icons {
-  @apply w-12 h-12 flex items-center justify-center rounded-xl transition-all duration-300 ease-in-out;
-  @apply cursor-pointer origin-bottom p-2 relative overflow-hidden;
+  @apply w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-xl transition-all duration-300 ease-in-out;
+  @apply cursor-pointer origin-bottom p-2 relative shrink-0; /* shrink-0 prevents squishing */
 
   /* 3D Depth: Outer Shadow */
   box-shadow:

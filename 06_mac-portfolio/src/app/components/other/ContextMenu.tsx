@@ -30,7 +30,7 @@ export const ContextMenu = ({ x, y, onClose, onChangeWallpaper }: ContextMenuPro
             />
 
             <div
-                className="fixed z-[200] w-64 bg-[#1e1e1e]/70 backdrop-blur-2xl border border-white/10 rounded-lg py-1.5 shadow-2xl text-white select-none animate-in fade-in zoom-in duration-150"
+                className="fixed z-[200] w-64 max-w-[90vw] bg-[#1e1e1e]/70 backdrop-blur-2xl border border-white/10 rounded-lg py-1.5 shadow-2xl text-white select-none animate-in fade-in zoom-in duration-150"
                 style={{ top: y, left: x }}
             >
                 {menuItems.map((item, index) => (

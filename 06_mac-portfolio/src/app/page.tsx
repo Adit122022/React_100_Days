@@ -4,6 +4,7 @@ import { useState } from "react";
 import { wallpapersList } from "@/lib/constatns";
 import ContextMenu from "./components/other/ContextMenu";
 import WallpaperWindow from "./components/other/WallpaperWindow";
+import Github from "./components/windows/main_content_screens/Github";
 
 const Page = () => {
   const [wallpaper, setWallpaper] = useState(wallpapersList[0].url);
@@ -41,6 +42,7 @@ const Page = () => {
         currentWallpaper={wallpaper}
         onSelect={(url) => setWallpaper(url)}
       />
+      <Github />
     </main>
   );
 }
