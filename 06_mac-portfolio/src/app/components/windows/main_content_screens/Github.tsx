@@ -3,17 +3,26 @@ import React, { useEffect, useState } from 'react'
 import MacWindow from '../MacWindow'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { Github as GithubIcon, MapPin, Link as LinkIcon, Users } from "lucide-react"
+import { Github as GithubIcon, MapPin, ExternalLink, Code2 } from "lucide-react"
+import { projects, userDetails } from '@/lib/constatns'
+
+
 
 const Github = () => {
     const [user, setUser] = useState<any>(null);
 
+
+
     useEffect(() => {
         const datafetcher = async () => {
-            const res = await fetch("https://api.github.com/users/adit122022")
-            const data = await res.json()
-            setUser(data)
-            console.log(data)
+            try {
+                const res = await fetch(`https://api.github.com/users/${userDetails.githubUsername}`)
+                const data = await res.json()
+                setUser(data)
+                console.log(data)
+            } catch (err) {
+                console.error("Error fetching data:", err)
+            }
         }
         datafetcher()
     }, []);
@@ -21,10 +30,10 @@ const Github = () => {
     if (!user) return null;
 
     return (
-        <MacWindow>
-            <div className="flex h-full bg-[#1e1e1e] text-white overflow-x-hidden overflow-y-auto">
-                {/* Left Sidebar (Profile) */}
-                <div className="w-1/3 border-r border-white/10 p-6 flex flex-col items-center gap-4">
+        <MacWindow x={300} y={100} width="50vw" height="60vh">
+            <div className="flex h-full bg-[#1e1e1e] text-white overflow-hidden">
+                {/* Left Sidebar */}
+                <aside className="w-1/3 border-r border-white/10 p-6 flex flex-col items-center gap-4 bg-black/20">
                     <Avatar className="w-24 h-24 border-2 border-white/20">
                         <AvatarImage src={user.avatar_url} />
                         <AvatarFallback>AS</AvatarFallback>
@@ -32,47 +41,71 @@ const Github = () => {
 
                     <div className="text-center">
                         <h2 className="text-lg font-bold">{user.name || "Aditya Sharma"}</h2>
-                        <p className="text-sm text-white/50">@{user.login}</p>
+                        <a href={`${user.html_url}`} target="_blank" className="text-sm text-white/50 hover:text-white"><p className="text-sm text-white/50">@{user.login}</p></a>
                     </div>
 
-                    <p className="text-xs text-center text-white/80 px-2 leading-relaxed">
-                        {user.bio || "Full-Stack Developer | MERN Enthusiast"}
+                    <p className="text-xs text-center text-white/80 leading-relaxed italic">
+                        "{user.bio || "Full-Stack Developer | MERN Enthusiast"}"
                     </p>
 
-                    <div className="w-full space-y-2 mt-4 text-[11px] text-white/60">
+                    <div className="w-full flex items-center gap-5  mt-4 text-[11px] text-white/60">
                         <div className="flex items-center gap-2">
-                            <MapPin size={12} /> {user.location || "Rajasthan, India"}
+                            <MapPin size={15} className="text-red-400" /> {user.location || "Kota, Rajasthan"}
                         </div>
                         <div className="flex items-center gap-2">
-                            <LinkIcon size={12} /> <a href={user.blog} className="hover:text-blue-400">Portfolio</a>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Right Content (Stats) */}
-                <div className="flex-1 p-6 space-y-6 overflow-y-auto">
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="bg-white/5 p-4 rounded-xl border border-white/10">
-                            <div className="flex items-center gap-2 text-white/50 mb-1">
-                                <Users size={14} /> <span className="text-[10px] uppercase font-bold tracking-wider">Followers</span>
-                            </div>
-                            <p className="text-2xl font-bold">{user.followers}</p>
-                        </div>
-                        <div className="bg-white/5 p-4 rounded-xl border border-white/10">
-                            <div className="flex items-center gap-2 text-white/50 mb-1">
-                                <GithubIcon size={14} /> <span className="text-[10px] uppercase font-bold tracking-wider">Public Repos</span>
-                            </div>
-                            <p className="text-2xl font-bold">{user.public_repos}</p>
+                            <GithubIcon size={15} className="text-gray-200" />
+                            <a href={user.blog || "#"} target="_blank" className="hover:underline">Github</a>
                         </div>
                     </div>
 
-                    {/* Quick Tags */}
-                    <div className="space-y-3">
-                        <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest">Tech Stack</h3>
-                        <div className="flex flex-wrap gap-2">
-                            <Badge variant="secondary" className="bg-blue-500/10 text-blue-400 border-none">MERN Stack</Badge>
-                            <Badge variant="secondary" className="bg-green-500/10 text-green-400 border-none">Next.js</Badge>
-                            <Badge variant="secondary" className="bg-purple-500/10 text-purple-400 border-none">TypeScript</Badge>
+                </aside>
+
+                {/* Right Content */}
+                <div className="flex-1 p-6 space-y-8 overflow-y-auto custom-scrollbar">
+                    {/* Stats Header */}
+                    <div className="flex items-center gap-2">
+                        <GithubIcon size={14} />
+                        <Badge variant="outline" className='text-white/50 '>
+                            <span className="text-sm uppercase font-bold tracking-wider">Followers : </span>
+                            <span className='text-sm text-blue-200'>  {user.followers}</span>
+                        </Badge>
+                        <Badge variant="outline" className='text-white/50'>
+                            <span className="text-sm uppercase font-bold tracking-wider">Repos : </span>
+                            <span className='text-sm text-blue-200'>{user.public_repos}</span>
+                        </Badge>
+                    </div>
+
+                    {/* Projects Section */}
+                    <div className="space-y-4">
+                        <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest flex items-center gap-2">
+                            <Code2 size={14} /> Featured Projects
+                        </h3>
+
+                        <div className="grid gap-4">
+                            {projects.map((project, index) => (
+                                <div key={index} className="flex gap-4 p-3 bg-white/5 rounded-xl border border-white/10 group hover:border-blue-500/50 transition-all">
+                                    <div className="w-32 h-20 rounded-lg overflow-hidden flex-shrink-0 border border-white/10">
+                                        <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                                    </div>
+                                    <div className="flex-1 space-y-1">
+                                        <div className="flex items-center justify-between">
+                                            <h4 className="text-sm font-bold text-blue-400">{project.title}</h4>
+                                            <div className="flex gap-3 text-white/40">
+                                                <a href={project.github} target="_blank" className="hover:text-white"><GithubIcon size={14} /></a>
+                                                <a href={project.live} target="_blank" className="hover:text-white"><ExternalLink size={14} /></a>
+                                            </div>
+                                        </div>
+                                        <p className="text-[11px] text-white/60 line-clamp-2">{project.description}</p>
+                                        <div className="flex gap-1 pt-1">
+                                            {project.tech.map((t, i) => (
+                                                <span key={i} className="text-[9px] bg-white/5 px-1.5 py-0.5 rounded text-white/40 border border-white/5">
+                                                    {t}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
@@ -81,4 +114,4 @@ const Github = () => {
     )
 }
 
-export default Github; // Yeh line bahut zaroori hai error hatane ke liye!
+export default Github;

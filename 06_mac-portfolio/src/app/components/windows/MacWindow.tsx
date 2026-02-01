@@ -2,15 +2,21 @@ import { dots, userDetails } from '@/lib/constatns';
 import React from 'react'
 import { Rnd } from 'react-rnd'
 
-const MacWindow = ({ children }: { children: React.ReactNode }) => {
 
-    const [isMaximized, setIsMaximized] = React.useState(false);
+interface MacWindowProps {
+    children: React.ReactNode;
+    x: number;
+    y: number;
+    width: string;
+    height: string;
+}
+const MacWindow = ({ children , x , y , width , height }: MacWindowProps) => {
     return (
         <Rnd default={{
-            x: 0,
-            y: 0,
-            width: 320,
-            height: 200,
+            x: x,
+            y: y,
+            width: width,
+            height: height,
         }}>
             <div className="w-full h-full bg-black rounded-lg ">
 
