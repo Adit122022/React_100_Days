@@ -3,7 +3,7 @@
 > _Fleeting moments. Absolute privacy._
 
 **Setsuna** is a modern, high-performance, real-time chat application designed for true anonymity. Like the "moment" its name implies, every conversation is ephemeral.
-
+![live preview]("https://setsuna-ad.vercel.app/)
 ### 🔒 10-Minute Lifespan & Self-Destruct
 
 **Your privacy is our priority.** Every chat room has a strict **10-minute lifespan**. Once the time is up, the room creates a self-destruct sequence, and all messages are permanently erased.
