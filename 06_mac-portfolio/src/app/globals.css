@@ -18,6 +18,16 @@
 .scrollbar-none::-webkit-scrollbar {
   display: none;
 }
+.scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 4px;
+  background-color: #121111;
+}
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: #6a6969;
+  border-radius: 10px;
+}
+
 .dock-icons {
   @apply w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-xl transition-all duration-300 ease-in-out;
   @apply cursor-pointer origin-bottom p-2 relative shrink-0; /* shrink-0 prevents squishing */
@@ -218,4 +228,19 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@keyframes window-open {
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-window-open {
+  animation: window-open 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }

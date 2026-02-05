@@ -1,12 +1,29 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import MacWindow from '../MacWindow'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Github as GithubIcon, MapPin, ExternalLink, Layers, Users, FolderGit2 } from "lucide-react"
 import { projects, userDetails } from '@/lib/constatns'
 
-const Github = () => {
+interface WindowsState {
+    github: boolean;
+    note: boolean;
+    resume: boolean;
+    spotify: boolean;
+    cli: boolean;
+    calender: boolean;
+    link: boolean;
+    mail: boolean;
+    pdf: boolean;
+}
+
+interface GithubProps {
+    windowName: keyof WindowsState;
+    setWindowsState: Dispatch<SetStateAction<WindowsState>>;
+}
+
+const Github = ({ windowName, setWindowsState }: GithubProps) => {
     const [user, setUser] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
@@ -29,7 +46,13 @@ const Github = () => {
     if (!user) return null;
 
     return (
-        <MacWindow x={300} y={100} width="60vw" height="65vh">
+        <MacWindow
+            x={300}
+            y={100}
+            width="60vw"
+            height="65vh"
+            onClose={() => setWindowsState((prev) => ({ ...prev, [windowName]: false }))}
+        >
             <div className="flex flex-col md:flex-row h-full w-full bg-[#09090b] text-zinc-100 overflow-hidden  scrollbar-none overflow-y-scroll font-sans selection:bg-indigo-500/30">
 
                 {/* Background Grid Pattern */}

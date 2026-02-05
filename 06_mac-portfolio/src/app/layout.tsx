@@ -1,8 +1,7 @@
 
 import { Inter } from "next/font/google"; // Inter font Mac ke liye kaafi close hai
 import "./globals.css";
-import Navigation from "./components/other/Navigation";
-import Dock from "./components/other/Dock";
+
 
 
 // Inter font setup
@@ -39,17 +38,12 @@ export default function RootLayout({
           overflow: 'hidden' // Scrollbars hide karne ke liye
         }}
       >
-        {/* Top Navbar fix rahega */}
-        <Navigation />
+       
 
-        {/* Main Desktop Area (children) */}
-        <main className="relative w-full h-full pt-8 pb-20">
+  
           {children}
 
-        </main>
-
-        {/* Bottom Dock fix rahega */}
-        <Dock />
+      
       </body>
     </html>
   );
