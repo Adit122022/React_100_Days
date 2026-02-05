@@ -15,6 +15,9 @@
   @apply overflow-x-auto md:overflow-visible; /* Allow scroll on very small screens if needed, otherwise fit */
 }
 
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
 .dock-icons {
   @apply w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-xl transition-all duration-300 ease-in-out;
   @apply cursor-pointer origin-bottom p-2 relative shrink-0; /* shrink-0 prevents squishing */

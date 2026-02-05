@@ -12,6 +12,10 @@ const inter = Inter({
 });
 
 
+const metadata = {
+  title: "Aditya_Sharma",
+  description: "Portfolio",
+}
 
 export default function RootLayout({
   children,
