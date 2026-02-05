@@ -4,19 +4,9 @@ import MacWindow from '../MacWindow'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Github as GithubIcon, MapPin, ExternalLink, Layers, Users, FolderGit2 } from "lucide-react"
-import { projects, userDetails } from '@/lib/constatns'
+import { projects, userDetails, WindowsState } from '@/lib/constatns'
 
-interface WindowsState {
-    github: boolean;
-    note: boolean;
-    resume: boolean;
-    spotify: boolean;
-    cli: boolean;
-    calender: boolean;
-    link: boolean;
-    mail: boolean;
-    pdf: boolean;
-}
+
 
 interface GithubProps {
     windowName: keyof WindowsState;

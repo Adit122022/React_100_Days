@@ -8,6 +8,7 @@ import Github from "./components/windows/main_content_screens/Github";
 import Note from "./components/windows/main_content_screens/Note";
 import Navigation from "./components/other/Navigation";
 import Dock from "./components/other/Dock";
+import Spotify from "./components/windows/main_content_screens/Spotify";
 
 const Page = () => {
   const [wallpaper, setWallpaper] = useState(wallpapersList[0].url);
@@ -62,8 +63,8 @@ const Page = () => {
       {windowsState.github && <Github windowName="github" setWindowsState={setWindowsState} />}
       {windowsState.note && <Note windowName="note" setWindowsState={setWindowsState} />}
       {/* {windowsState.resume && <Resume windowName="resume" setWindowsState={setWindowsState} />}
-      {windowsState.spotify && <Spotify windowName="spotify" setWindowsState={setWindowsState} />}
       {windowsState.cli && <Cli windowName="cli" setWindowsState={setWindowsState} />} */}
+      {windowsState.spotify && <Spotify windowName="spotify" setWindowsState={setWindowsState} />}
 
       {/* Bottom Dock fix rahega */}
       <Dock setWindowsState={setWindowsState} windowsState={windowsState} />

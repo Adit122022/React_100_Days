@@ -65,3 +65,15 @@ export const userDetails = {
             live: "#"
         }
     ];
+
+    export interface WindowsState {
+        github: boolean;
+        note: boolean;
+        resume: boolean;
+        spotify: boolean;
+        cli: boolean;
+        calender: boolean;
+        link: boolean;
+        mail: boolean;
+        pdf: boolean;
+    }

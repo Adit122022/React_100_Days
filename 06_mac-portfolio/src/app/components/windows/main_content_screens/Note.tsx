@@ -5,18 +5,8 @@ import MacWindow from '../MacWindow'
 import Markdown from 'react-markdown'
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import { atelierDuneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs'
+import { WindowsState } from '@/lib/constatns'
 
-interface WindowsState {
-    github: boolean;
-    note: boolean;
-    resume: boolean;
-    spotify: boolean;
-    cli: boolean;
-    calender: boolean;
-    link: boolean;
-    mail: boolean;
-    pdf: boolean;
-}
 
 interface NoteProps {
     windowName: keyof WindowsState;
