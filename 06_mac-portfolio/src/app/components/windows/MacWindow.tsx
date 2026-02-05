@@ -1,6 +1,7 @@
 import { dots, userDetails } from '@/lib/constatns';
 import React from 'react'
 import { Rnd } from 'react-rnd'
+import { motion } from 'framer-motion';
 
 
 interface MacWindowProps {
@@ -19,7 +20,15 @@ const MacWindow = ({ children, x, y, width, height, title, onClose }: MacWindowP
             width: width,
             height: height,
         }}>
-            <div className="w-full h-full bg-black rounded-lg animate-window-open">
+            <motion.div
+                initial={{ scale: 0, opacity: 0, filter: "blur(4px)" }}
+                animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
+                transition={{
+                    type: "spring",
+                    stiffness: 260,
+                    damping: 20
+                }}
+                className="w-full h-full bg-black rounded-lg ">
 
                 {/* nav */}
                 <div className="w-full flex  items-center gap-5  p-2 border-b-[0.5px] border-gray-600">
@@ -44,7 +53,7 @@ const MacWindow = ({ children, x, y, width, height, title, onClose }: MacWindowP
                 <div className="w-full h-[calc(100%-20px)] text-white p-2">
                     {children}
                 </div>
-            </div>
+            </motion.div>
         </Rnd>
     )
 }
