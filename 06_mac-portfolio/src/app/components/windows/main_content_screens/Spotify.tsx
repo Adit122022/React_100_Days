@@ -12,7 +12,7 @@ interface SpotifyProps {
 const Spotify = ({ windowName, setWindowsState, title = "spotify" }: SpotifyProps) => {
     return (
         <MacWindow
-            x={100}
+            x={500}
             y={50}
             width="35vw"
             height="65vh"

@@ -21,8 +21,8 @@ const Dock = ({ setWindowsState, windowsState }: { setWindowsState: Dispatch<Set
         { src: "link.svg", alt: "Links", color: "bg-gradient-to-b from-[#5ac8fa] to-[#007aff]", onClick: () => setWindowsState((prev) => ({ ...prev, link: !windowsState.link })) }, // 3D Blue
         { src: "mail.svg", alt: "Mail", color: "bg-gradient-to-b from-[#7d7aff] to-[#5856d6]", onClick: () => setWindowsState((prev) => ({ ...prev, mail: !windowsState.mail })) }, // 3D Indigo
         { src: "pdf.svg", alt: "PDF", color: "bg-gradient-to-b from-[#ff4b2b] to-[#f40f02]", onClick: () => setWindowsState((prev) => ({ ...prev, pdf: !windowsState.pdf })) }, // 3D Red-Orange
-        { src: "spotify.svg", alt: "Spotify", color: "bg-gradient-to-b from-[#2ecc71] to-[#1DB954]", onClick: () => setWindowsState((prev) => ({ ...prev, spotify: true })) }, // 3D Green
-        { src: "note.svg", alt: "Notes", color: "bg-gradient-to-b from-[#ffd54f] via-[#ffcc00] to-[#ffb300]", onClick: () => setWindowsState((prev) => ({ ...prev, note: true })) }, // 3D Yellow
+        { src: "spotify.svg", alt: "Spotify", color: "bg-gradient-to-b from-[#2ecc71] to-[#1DB954]", onClick: () => setWindowsState((prev) => ({ ...prev, spotify: !windowsState.spotify })) }, // 3D Green
+        { src: "note.svg", alt: "Notes", color: "bg-gradient-to-b from-[#ffd54f] via-[#ffcc00] to-[#ffb300]", onClick: () => setWindowsState((prev) => ({ ...prev, note: !windowsState.note })) }, // 3D Yellow
     ];
 
     return (
