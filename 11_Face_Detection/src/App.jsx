@@ -1,5 +1,3 @@
-
-import './App.css'
 import FaceExpression from './features/Expressions/components/FaceExpression'
 
 function App() {
