@@ -1,28 +1,31 @@
-// import { useEffect } from 'react'
-import { useRecipes } from '../context/RecipeContext';
-
+import { Link } from 'react-router-dom'
+import { useRecipes } from '../context/RecipeContext'
+import RecipeCard from '../components/RecipeCard'
 
 const Recipes = () => {
-    const { recipes, deleteRecipe } = useRecipes();
-    console.log(recipes);
+    const { recipes, deleteRecipe } = useRecipes()
+
     return (
-        <div>
-            {recipes.map((recipe, id) => (
-                <article key={id} className="saved-recipe-card">
-                    {/* <button onClick={() => updateRecipe(recipe.id, { title: 'Updated Title' })}>Update</button> */}
-                    {typeof recipe.image === 'string' && <img src={recipe.image} alt={recipe.title} className="saved-recipe-image" />}
-                    <div className="saved-recipe-copy">
-                        <div className="saved-recipe-top"><span>{recipe.category}</span><button className="saved-recipe-delete" onClick={() => deleteRecipe(recipe.id)}>Delete</button></div>
-                        <h3>{recipe.title}</h3>
-                        <p className="saved-recipe-chef">By {recipe.chefName || 'A goodtable cook'}</p>
-                        <p>{recipe.description}</p>
-                        <h4>Ingredients</h4><p>{recipe.ingredients}</p>
-                        <h4>Method</h4><p>{recipe.instructions}</p>
-                    </div>
-                </article>
-            ))}
-            {!recipes.length && <div className="saved-recipes-empty"><span>✳</span><h2>Your recipe box is waiting.</h2><p>Share the first recipe and start filling it with good things.</p></div>}
-        </div>
+        <main className="recipe-box-page">
+            <header className="recipe-box-heading">
+                <span className="create-kicker"><i /> FROM OUR KITCHENS TO YOURS</span>
+                <h1>The recipe <em>box.</em></h1>
+                <p>Good things are better shared. Here are the recipes you’ve gathered around the table.</p>
+                <span className="recipe-box-count">{recipes.length} {recipes.length === 1 ? 'recipe' : 'recipes'}</span>
+            </header>
+            {recipes.length ? (
+                <section className="recipe-box-grid" aria-label="Saved recipes">
+                    {recipes.map((recipe) => <RecipeCard key={recipe.id} recipe={recipe} onDelete={deleteRecipe} />)}
+                </section>
+            ) : (
+                <section className="saved-recipes-empty">
+                    <span aria-hidden="true">✳</span>
+                    <h2>Your recipe box is waiting.</h2>
+                    <p>Share the first recipe and start filling it with good things.</p>
+                    <Link className="button-primary" to="/create-recipes">Share a recipe <span aria-hidden="true">↗</span></Link>
+                </section>
+            )}
+        </main>
     )
 }
 
