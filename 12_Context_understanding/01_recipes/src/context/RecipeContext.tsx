@@ -1,44 +1,51 @@
-import React, { createContext } from 'react'
+import React, { createContext, useCallback, useContext, useMemo, useState } from 'react'
 
+export interface Recipe {
+    id: string;
+    title: string;
+    description: string;
+    category: string;
+    ingredients: string;
+    instructions: string;
+    image: FileList;
+}
 
 export interface RecipeContextType {
-  recipes: any[];
-  addRecipe: (recipe: any) => void;
-  updateRecipe: (id: string, updatedRecipe: any) => void;
-  deleteRecipe: (id: string) => void;
+    recipes: Recipe[];
+    addRecipe: (recipe: Recipe) => void;
+    updateRecipe: (id: string, updatedRecipe: Recipe) => void;
+    deleteRecipe: (id: string) => void;
 }
 
-export const CreateRecipeContext = createContext<RecipeContextType | undefined>(undefined);
+const RecipeContext = createContext<RecipeContextType | undefined>(undefined)
 
+export const RecipeProvider = ({ children }: { children: React.ReactNode }) => {
+    const [recipes, setRecipes] = useState<Recipe[]>([])
 
-const RecipeContext = ({ children }: { children: React.ReactNode }) => {
-    const [data, setData] = React.useState<RecipeContextType>({
-        recipes: [],
-        addRecipe: (recipe: any) => {
-            setData((prev) => ({
-                ...prev,
-                recipes: [...prev.recipes, recipe]
-            }));
-        },
-        updateRecipe: (id: string, updatedRecipe: any) => {
-            setData((prev) => ({
-                ...prev,
-                recipes: prev.recipes.map((r) => r.id === id ? updatedRecipe : r)
-            }));
-        },
-        deleteRecipe: (id: string) => {
-            setData((prev) => ({
-                ...prev,
-                recipes: prev.recipes.filter((r) => r.id !== id)
-            }));
-        }
-    });
+    const addRecipe = useCallback((recipe: Recipe) => {
+        setRecipes((prev) => [...prev, recipe])
+    }, [])
 
-    return (
-        <CreateRecipeContext.Provider value={data}>
-            {children}
-        </CreateRecipeContext.Provider>
+    const updateRecipe = useCallback((id: string, updatedRecipe: Recipe) => {
+        setRecipes((prev) => prev.map((r) => (r.id === id ? updatedRecipe : r)))
+    }, [])
+
+    const deleteRecipe = useCallback((id: string) => {
+        setRecipes((prev) => prev.filter((r) => r.id !== id))
+    }, [])
+
+    const value = useMemo(
+        () => ({ recipes, addRecipe, updateRecipe, deleteRecipe }),
+        [recipes, addRecipe, updateRecipe, deleteRecipe]
     )
+
+    return <RecipeContext.Provider value={value}>{children}</RecipeContext.Provider>
 }
 
-export default RecipeContext
+export const useRecipes = () => {
+    const context = useContext(RecipeContext)
+    if (!context) {
+        throw new Error('useRecipes must be used inside a <RecipeProvider>')
+    }
+    return context
+}

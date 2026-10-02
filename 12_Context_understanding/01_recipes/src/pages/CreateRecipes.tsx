@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Bounce, toast } from 'react-toastify';
 import { nanoid } from 'nanoid';
+
 
 interface RecipeFormData {
     id: string;
@@ -22,7 +23,9 @@ const fieldClass =
 const errorClass = 'mt-1.5 block text-xs font-medium text-red-500'
 
 const CreateRecipes = () => {
-    const { register, watch, handleSubmit, formState: { errors } } = useForm<RecipeFormData>();
+
+
+    const { register, watch, handleSubmit, reset, formState: { errors } } = useForm<RecipeFormData>();
     const [preview, setPreview] = useState<string | null>(null)
     const fileList = watch('image');
 
@@ -40,7 +43,7 @@ const CreateRecipes = () => {
 
     const SubmitHandler = (data: RecipeFormData) => {
         data.id = nanoid();
-        console.log(data);
+        addRecipe(data);
 
         toast.success('Recipe Created Successfully!', {
             position: "top-right",
@@ -53,6 +56,7 @@ const CreateRecipes = () => {
             theme: "colored",
             transition: Bounce,
         });
+        reset();
     }
     return (
         <div className="min-h-screen bg-gray-100 px-4 py-10">
