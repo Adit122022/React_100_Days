@@ -3,23 +3,25 @@ import { useRecipes } from '../context/RecipeContext';
 
 
 const Recipes = () => {
-    const { recipes, updateRecipe, deleteRecipe } = useRecipes();
+    const { recipes, deleteRecipe } = useRecipes();
     console.log(recipes);
     return (
         <div>
             {recipes.map((recipe, id) => (
-                <div key={id}>
+                <article key={id} className="saved-recipe-card">
                     {/* <button onClick={() => updateRecipe(recipe.id, { title: 'Updated Title' })}>Update</button> */}
-                    <button className="px-5 py-2 bg-rose-500" onClick={() => deleteRecipe(recipe.id)}>Delete</button>
-                    {/* <img src={recipe.image[0]} alt={recipe.title} /> */}
-                    <h3>{recipe.title}</h3>
-                    <p>{recipe.description}</p>
-                    <p>{recipe.category}</p>
-                    <p>{recipe.ingredients}</p>
-                    <p>{recipe.instructions}</p>
-                </div>
+                    {typeof recipe.image === 'string' && <img src={recipe.image} alt={recipe.title} className="saved-recipe-image" />}
+                    <div className="saved-recipe-copy">
+                        <div className="saved-recipe-top"><span>{recipe.category}</span><button className="saved-recipe-delete" onClick={() => deleteRecipe(recipe.id)}>Delete</button></div>
+                        <h3>{recipe.title}</h3>
+                        <p className="saved-recipe-chef">By {recipe.chefName || 'A goodtable cook'}</p>
+                        <p>{recipe.description}</p>
+                        <h4>Ingredients</h4><p>{recipe.ingredients}</p>
+                        <h4>Method</h4><p>{recipe.instructions}</p>
+                    </div>
+                </article>
             ))}
-            Recipes Page
+            {!recipes.length && <div className="saved-recipes-empty"><span>✳</span><h2>Your recipe box is waiting.</h2><p>Share the first recipe and start filling it with good things.</p></div>}
         </div>
     )
 }

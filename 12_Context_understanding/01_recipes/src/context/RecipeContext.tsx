@@ -3,11 +3,12 @@ import React, { createContext, useCallback, useContext, useEffect, useMemo, useS
 export interface RecipeInterface {
     id: string;
     title: string;
+    chefName: string;
     description: string;
     category: string;
     ingredients: string;
     instructions: string;
-    image: FileList;
+    image: string;
 }
 
 export interface RecipeContextType {
@@ -30,18 +31,27 @@ export const RecipeProvider = ({ children }: { children: React.ReactNode }) => {
     }, []);
 
     const addRecipe = useCallback((recipe: RecipeInterface) => {
-        setRecipes((prev) => [...prev, recipe])
-        localStorage.setItem('recipes', JSON.stringify([...recipes, recipe]));
+        setRecipes((prev) => {
+            const next = [...prev, recipe]
+            localStorage.setItem('recipes', JSON.stringify(next))
+            return next
+        })
     }, [])
 
     const updateRecipe = useCallback((id: string, updatedRecipe: RecipeInterface) => {
-        setRecipes((prev) => prev.map((r) => (r.id === id ? updatedRecipe : r)))
-        localStorage.setItem('recipes', JSON.stringify(recipes.map((r) => (r.id === id ? updatedRecipe : r))));
+        setRecipes((prev) => {
+            const next = prev.map((recipe) => recipe.id === id ? updatedRecipe : recipe)
+            localStorage.setItem('recipes', JSON.stringify(next))
+            return next
+        })
     }, [])
 
     const deleteRecipe = useCallback((id: string) => {
-        setRecipes((prev) => prev.filter((r) => r.id !== id))
-        localStorage.setItem('recipes', JSON.stringify(recipes.filter((r) => r.id !== id)));
+        setRecipes((prev) => {
+            const next = prev.filter((recipe) => recipe.id !== id)
+            localStorage.setItem('recipes', JSON.stringify(next))
+            return next
+        })
     }, [])
 
     const value = useMemo(
