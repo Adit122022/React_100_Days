@@ -1,4 +1,5 @@
 import type { RecipeInterface } from '../context/RecipeContext'
+import { Link } from 'react-router-dom'
 
 interface RecipeCardProps {
     recipe: RecipeInterface
@@ -17,7 +18,7 @@ const RecipeCard = ({ recipe, onDelete }: RecipeCardProps) => (
         </div>
         <div className="recipe-box-content">
             <div className="recipe-box-byline">A GOODTABLE RECIPE <span>·</span> BY {recipe.chefName || 'A GOODTABLE COOK'}</div>
-            <h2>{recipe.title}</h2>
+            <h2><Link to={`/recipes/${recipe.id}`}>{recipe.title}</Link></h2>
             <p className="recipe-box-description">{recipe.description}</p>
             <details className="recipe-box-details">
                 <summary><span>View ingredients &amp; method</span><span className="recipe-box-toggle" aria-hidden="true">＋</span></summary>
@@ -26,7 +27,7 @@ const RecipeCard = ({ recipe, onDelete }: RecipeCardProps) => (
                     <section><h3>Method</h3><p>{recipe.instructions}</p></section>
                 </div>
             </details>
-            <div className="recipe-box-footer"><span>Made with a little love <i>✳</i></span><button type="button" className="recipe-box-delete" onClick={() => onDelete(recipe.id)} aria-label={`Delete ${recipe.title}`}>Delete recipe</button></div>
+            <div className="recipe-box-footer"><Link className="recipe-box-open" to={`/recipes/${recipe.id}`}>Open full recipe <span aria-hidden="true">↗</span></Link><button type="button" className="recipe-box-delete" onClick={() => onDelete(recipe.id)} aria-label={`Delete ${recipe.title}`}>Delete recipe</button></div>
         </div>
     </article>
 )
