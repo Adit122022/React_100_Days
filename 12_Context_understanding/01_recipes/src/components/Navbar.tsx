@@ -1,4 +1,3 @@
-import React from 'react'
 import { NavLink } from 'react-router-dom'
 
 const links = [
@@ -9,38 +8,25 @@ const links = [
 
 const Navbar = () => {
     return (
-        <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur">
-            <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-                <NavLink to="/" className="text-2xl font-bold tracking-tight text-gray-900">
-                    Recipe<span className="text-red-500">App</span>
+        <header className="site-header">
+            <div className="site-nav">
+                <NavLink to="/" className="site-brand">
+                    good<span>table</span><i>✳</i>
                 </NavLink>
 
-                <nav className="flex items-center gap-8">
+                <nav className="site-links" aria-label="Main navigation">
                     {links.map(({ to, label }) => (
                         <NavLink
                             key={to}
                             to={to}
-                            className={({ isActive }) =>
-                                [
-                                    // base
-                                    'relative py-1 text-sm font-medium transition-colors duration-300',
-                                    // underline (pseudo-element)
-                                    'after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-full',
-                                    'after:rounded-full after:bg-red-500',
-                                    'after:transition-transform after:duration-300 after:ease-out',
-                                    isActive
-                                        ? 'text-red-600 after:origin-left after:scale-x-100'
-                                        : // enters from the left, exits to the right
-                                        'text-gray-600 hover:text-gray-900 after:origin-right after:scale-x-0 hover:after:origin-left hover:after:scale-x-100',
-                                ].join(' ')
-                            }
+                            className={({ isActive }) => isActive ? 'site-link active' : 'site-link'}
                         >
                             {label}
                         </NavLink>
                     ))}
                 </nav>
-                <NavLink to="/create-recipes" className="rounded-lg bg-red-500 px-4 py-2 text-sm font-medium text-white transition-colors duration-300 hover:bg-red-600">
-                    Add Recipe
+                <NavLink to="/create-recipes" className="nav-cta">
+                    <span aria-hidden="true">+</span> Share a recipe
                 </NavLink>
             </div>
         </header>

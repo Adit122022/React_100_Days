@@ -2,17 +2,10 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Bounce, toast } from 'react-toastify';
 import { nanoid } from 'nanoid';
+import { useRecipes, type RecipeInterface, } from '../context/RecipeContext';
 
 
-interface RecipeFormData {
-    id: string;
-    title: string;
-    description: string;
-    category: string;
-    ingredients: string;
-    image: FileList;
-    instructions: string;
-}
+
 
 const categories = ['Breakfast', 'Lunch', 'Dinner', 'Dessert', 'Snacks', 'Drinks']
 
@@ -23,9 +16,9 @@ const fieldClass =
 const errorClass = 'mt-1.5 block text-xs font-medium text-red-500'
 
 const CreateRecipes = () => {
+    const { addRecipe } = useRecipes()
 
-
-    const { register, watch, handleSubmit, reset, formState: { errors } } = useForm<RecipeFormData>();
+    const { register, watch, handleSubmit, reset, formState: { errors } } = useForm<RecipeInterface>();
     const [preview, setPreview] = useState<string | null>(null)
     const fileList = watch('image');
 
@@ -35,15 +28,18 @@ const CreateRecipes = () => {
             setPreview(null);
             return;
         }
+        console.log("File selected:", file);
         const url = URL.createObjectURL(file);
         setPreview(url);
         return () => URL.revokeObjectURL(url);
     }, [fileList]);
 
 
-    const SubmitHandler = (data: RecipeFormData) => {
+    const SubmitHandler = (data: RecipeInterface) => {
         data.id = nanoid();
-        addRecipe(data);
+        console.log("Image Preview:", preview);
+        console.log("Submitted Data:", data);
+        addRecipe({ ...data, image: preview ? new DataTransfer().files : new DataTransfer().files });
 
         toast.success('Recipe Created Successfully!', {
             position: "top-right",

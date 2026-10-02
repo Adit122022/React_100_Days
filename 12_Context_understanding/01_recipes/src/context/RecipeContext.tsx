@@ -1,6 +1,6 @@
-import React, { createContext, useCallback, useContext, useMemo, useState } from 'react'
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
-export interface Recipe {
+export interface RecipeInterface {
     id: string;
     title: string;
     description: string;
@@ -11,27 +11,37 @@ export interface Recipe {
 }
 
 export interface RecipeContextType {
-    recipes: Recipe[];
-    addRecipe: (recipe: Recipe) => void;
-    updateRecipe: (id: string, updatedRecipe: Recipe) => void;
+    recipes: RecipeInterface[];
+    addRecipe: (recipe: RecipeInterface) => void;
+    updateRecipe: (id: string, updatedRecipe: RecipeInterface) => void;
     deleteRecipe: (id: string) => void;
 }
 
 const RecipeContext = createContext<RecipeContextType | undefined>(undefined)
 
 export const RecipeProvider = ({ children }: { children: React.ReactNode }) => {
-    const [recipes, setRecipes] = useState<Recipe[]>([])
+    const [recipes, setRecipes] = useState<RecipeInterface[]>([])
 
-    const addRecipe = useCallback((recipe: Recipe) => {
+    useEffect(() => {
+        const savedRecipes = localStorage.getItem('recipes');
+        if (savedRecipes) {
+            setRecipes(JSON.parse(savedRecipes));
+        }
+    }, []);
+
+    const addRecipe = useCallback((recipe: RecipeInterface) => {
         setRecipes((prev) => [...prev, recipe])
+        localStorage.setItem('recipes', JSON.stringify([...recipes, recipe]));
     }, [])
 
-    const updateRecipe = useCallback((id: string, updatedRecipe: Recipe) => {
+    const updateRecipe = useCallback((id: string, updatedRecipe: RecipeInterface) => {
         setRecipes((prev) => prev.map((r) => (r.id === id ? updatedRecipe : r)))
+        localStorage.setItem('recipes', JSON.stringify(recipes.map((r) => (r.id === id ? updatedRecipe : r))));
     }, [])
 
     const deleteRecipe = useCallback((id: string) => {
         setRecipes((prev) => prev.filter((r) => r.id !== id))
+        localStorage.setItem('recipes', JSON.stringify(recipes.filter((r) => r.id !== id)));
     }, [])
 
     const value = useMemo(
