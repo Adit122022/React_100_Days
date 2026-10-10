@@ -18,8 +18,10 @@ export interface RecipeContextType {
     deleteRecipe: (id: string) => void;
 }
 
+//  RecipeContext 
 const RecipeContext = createContext<RecipeContextType | undefined>(undefined)
 
+// RecipeProvider component that wraps the application and provides the RecipeContext
 export const RecipeProvider = ({ children }: { children: React.ReactNode }) => {
     const [recipes, setRecipes] = useState<RecipeInterface[]>([])
 
@@ -62,6 +64,7 @@ export const RecipeProvider = ({ children }: { children: React.ReactNode }) => {
     return <RecipeContext.Provider value={value}>{children}</RecipeContext.Provider>
 }
 
+//  Hook to use the RecipeContext
 export const useRecipes = () => {
     const context = useContext(RecipeContext)
     if (!context) {

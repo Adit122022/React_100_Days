@@ -3,10 +3,11 @@ import { Link } from 'react-router-dom'
 
 interface RecipeCardProps {
     recipe: RecipeInterface
+    onUpdate: (recipe: RecipeInterface) => void
     onDelete: (id: string) => void
 }
 
-const RecipeCard = ({ recipe, onDelete }: RecipeCardProps) => (
+const RecipeCard = ({ recipe, onDelete, onUpdate }: RecipeCardProps) => (
     <article className="recipe-box-card">
         <div className="recipe-box-image-wrap">
             {typeof recipe.image === 'string' && recipe.image ? (
@@ -20,6 +21,7 @@ const RecipeCard = ({ recipe, onDelete }: RecipeCardProps) => (
             <div className="recipe-box-byline">A GOODTABLE RECIPE <span>·</span> BY {recipe.chefName || 'A GOODTABLE COOK'}</div>
             <h2><Link to={`/recipes/${recipe.id}`}>{recipe.title}</Link></h2>
             <p className="recipe-box-description">{recipe.description}</p>
+            <button type="button" className="recipe-box-edit" onClick={() => onUpdate(recipe)} aria-label={`Edit ${recipe.title}`}>Edit recipe</button>
             <details className="recipe-box-details">
                 <summary><span>View ingredients &amp; method</span><span className="recipe-box-toggle" aria-hidden="true">＋</span></summary>
                 <div className="recipe-box-full-details">
